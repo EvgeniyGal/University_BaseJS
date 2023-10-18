@@ -56,49 +56,49 @@
 
 // *****Function Expression*****\\
 // const person = {
-//     name: 'Alice',
-//     hello: function () {
-//         console.log(this);
-//         console.log(this.name);
-//     }
-// }
-// person.hello()
+//   name: "Alice",
+//   hello: function () {
+//     console.log(this);
+//     console.log(this.name);
+//   },
+// };
+// person.hello();
 
 // *****Arrow Function*****\\
 // const person = {
-//     name: 'Alice',
-//     hello: () => {
-//         console.log(this);
-//     }
-// }
+//   name: "Alice",
+//   hello: () => {
+//     console.log(this);
+//   },
+// };
 // person.hello();
 
 // const person = {
-//     name: 'Alice',
-//     hello() {
-//         console.log(this);
+//   name: "Alice",
+//   hello() {
+//     console.log(this);
 
-//         const arrowFn = () => {
-//             console.log('arrowFn', this);
-//         }
-//         arrowFn();
-//     }
-// }
-// person.hello()
+//     const arrowFn = () => {
+//       console.log("arrowFn", this);
+//     };
+//     arrowFn();
+//   },
+// };
+// person.hello();
 
-// const  fn = () => {
+// const fn = () => {
 //   console.log(this);
-// }
+// };
 
 // const objA = {
 //   name: "Alice",
 //   skills: {
-//     name: 'Kate',
+//     name: "Kate",
 //     log: fn,
 //   },
 // };
 
-// objA.skills.log()
+// objA.skills.log();
 
 // const objA = {
 //   name: "Alice",
@@ -110,26 +110,26 @@
 // objA.fn();
 
 // const objA = {
-//     name: 'Den',
-//     fn: function(){
-//       const arrow = () => {
-//         console.log(this);
-//       }
-//       arrow()
-//     }
-// }
+//   name: "Den",
+//   fn: function () {
+//     const arrow = () => {
+//       console.log(this);
+//     };
+//     arrow();
+//   },
+// };
 
-// objA.fn()
+// objA.fn();
 
 // const objB = {
-//     name: 'Alice',
-//     skills: {
-//         name: 'Kate',
-//         fn: objA.fn
-//     }
-// }
+//   name: "Alice",
+//   skills: {
+//     name: "Kate",
+//     fn: objA.fn,
+//   },
+// };
 
-// objB.skills.fn()
+// objB.skills.fn();
 
 // const objA = {
 //   name: "Alice",
@@ -158,23 +158,23 @@
 // };
 
 // const drive = (action) => {
-//     console.log(this);
+//   console.log(this);
 //   console.log(`${this.brand} їде зі швидкістю ${this.speed} км/год. ${action}`);
 // };
 
 // drive.call(bmw, "Увімкнути ближнє світло");
 // const audi = {
-//     brand: 'Audi',
-//     speed: 80,
-//   };
+//   brand: "Audi",
+//   speed: 80,
+// };
 
 // function drive(action, city) {
-//     console.log(`${this.brand} їде зі швидкістю ${this.speed} км/год. ${action}`);
+//   console.log(`${this.brand} їде зі швидкістю ${this.speed} км/год. ${action}`);
 // }
 
-// // drive('Увімкнути ближнє світло')
-// drive.call(bmw, 'Увімкнути ближнє світло');
-// drive.call(audi, 'Увімкнути клімат-контроль','Lviv');
+// drive("Увімкнути ближнє світло");
+// drive.call(bmw, "Увімкнути ближнє світло");
+// drive.call(audi, "Увімкнути клімат-контроль", "Lviv");
 
 // *****apply***** \\
 
@@ -310,20 +310,63 @@
 // read(a, b)- приймає два значення та зберігає їх як властивості об'єкта.
 // add() - повертає суму збережених значень.
 // mult() - перемножує збережені значення та повертає результат.
-const calculator = {
-  read(valA, valB) {
-    this.a = valA;
-    this.b = valB;
-  },
-  add() {
-    return (this.a ?? 0) + (this.b ?? 0);
-  },
-  mult() {
-    return (this.a ?? 1) * (this.b ?? 1);
-  },
-};
+// const calculator = {
+//   read(valA, valB) {
+//     this.a = valA;
+//     this.b = valB;
+//   },
+//   add() {
+//     return (this.a ?? 0) + (this.b ?? 0);
+//   },
+//   mult() {
+//     return (this.a ?? 1) * (this.b ?? 1);
+//   },
+// };
 // console.log(calculator);
 // calculator.read(3, 4);
 // console.log(calculator);
 // console.log(calculator.add());
 // console.log(calculator.mult());
+
+class Car {
+  constructor(type) {
+    this.type = type;
+  }
+}
+
+class NewCar extends Car {
+  constructor(type, feature) {
+    super(type);
+    this.feture = feature;
+  }
+}
+
+const car = new Car("sedan");
+
+console.log(car);
+
+Car.prototype.color = "default color";
+
+console.log(car);
+car.color = "black";
+
+console.log(car.color);
+
+console.log(Object.keys(car));
+
+const car1 = new NewCar("Van", "CD");
+
+console.dir(car1);
+
+console.log(Object.getOwnPropertyNames(car1));
+console.log(car1.hasOwnProperty("type"));
+console.log(car1.color);
+
+for (const key in car1) {
+  if (Object.hasOwnProperty.call(car1, key)) {
+    const element = car1[key];
+    console.log("-----" + element);
+  }
+  const element = car1[key];
+  console.log("---------" + element);
+}

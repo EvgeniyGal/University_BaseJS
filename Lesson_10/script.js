@@ -203,41 +203,41 @@
 // *******Task-1****** \\
 // Необхідно створити клас Rectangle, який представляє прямокутник. Клас повинен мати приватні властивості width та height, а також гетери та сетери для цих властивостей. Гетери повинні повертати значення властивостей, а сетери повинні дозволяти змінювати значення властивостей з валідацією.
 
-// class Rectangle {
-//   #width;
-//   #height;
-//   constructor({ width, height } = {}) {
-//     this.#width = width;
-//     this.#height = height;
-//   }
-//   get width() {
-//     return this.#width;
-//   }
-//   set width(newWidth) {
-//     if (typeof newWidth === "number" && newWidth > 0) {
-//       this.#width = newWidth;
-//     } else {
-//       console.log("Ширина повинна бути числом та більша за 0");
-//     }
-//   }
+class Rectangle {
+  width;
+  #height;
+  constructor({ width, height } = {}) {
+    this.width = width;
+    this.#height = height;
+  }
+  // get width() {
+  //   return this.width;
+  // }
+  set width(newWidth) {
+    if (typeof newWidth === "number" && newWidth > 0) {
+      this.width = newWidth;
+    } else {
+      console.log("Ширина повинна бути числом та більша за 0");
+    }
+  }
 
-//   get height() {
-//     return this.#height;
-//   }
+  get height() {
+    return this.#height;
+  }
 
-//   set height(newHeight) {
-//     if (typeof newHeight === "number" && newHeight > 0) {
-//       this.#height = newHeight;
-//     }else{
-//         console.log("Висота повинна бути числом та більша за 0");
-//     }
-//   }
-// }
-// const item = new Rectangle({ width: 10, height: 5 });
-
-// console.log(item.width); // get
-// item.width = 12; // set
-// console.log(item.width); //get
+  set height(newHeight) {
+    if (typeof newHeight === "number" && newHeight > 0) {
+      this.#height = newHeight;
+    } else {
+      console.log("Висота повинна бути числом та більша за 0");
+    }
+  }
+}
+const item = new Rectangle({ width: 10, height: 5 });
+console.log("item.width = " + item.width);
+console.log(item.width); // get
+item.width = 12; // set
+console.log(item.width); //get
 
 // *******Task-2******* \\
 // Реалізуйте клас Student, який успадковуватиметься від класу User. Цей клас повинен мати такі властивості:
@@ -300,70 +300,98 @@
 // Метод heal додає до здоров'я героя 10 одиниць.
 
 // class Hero {
-//   static values = {
-//     gold: "Gold",
-//   };
-//   static counter = 0;
-//   static addHero() {
-//     this.counter += 1;
+//   static heroNumber = 0;
+
+//   static #addHero() {
+//     this.heroNumber++;
 //   }
-//   #level = 1;
+
+//   static getHeroNumber() {
+//     return Hero.heroNumber;
+//   }
+
 //   constructor(name) {
 //     this.name = name;
-//     // this.#level = 1;
-//     this.health = 200;
-//     Hero.addHero();
+//     this.level = 1;
+//     this.health = 100;
+//     Hero.#addHero();
 //   }
 
 //   attack() {
-//     console.log("Attack with 10 damage");
+//     console.log(`Attack with 10 damage by ${this.name}`);
 //   }
+
 //   heal() {
 //     this.health += 10;
 //   }
 // }
 
+// // class Hero {
+// //   static values = {
+// //     gold: "Gold",
+// //   };
+// //   static counter = 0;
+// //   static addHero() {
+// //     this.counter += 1;
+// //   }
+// //   #level = 1;
+// //   constructor(name) {
+// //     this.name = name;
+// //     // this.#level = 1;
+// //     this.health = 200;
+// //     Hero.addHero();
+// //   }
+
+// //   attack() {
+// //     console.log("Attack with 10 damage");
+// //   }
+// //   heal() {
+// //     this.health += 10;
+// //   }
+// // }
+
 // const bloodseker = new Hero("Bloodseker");
-// const bloodseker1 = new Hero("Bloodseker");
-// const bloodseker2 = new Hero("Bloodseker");
+// const bloodseker1 = new Hero("Bloodseker1");
+// const bloodseker2 = new Hero("Bloodseker2");
 // console.log(bloodseker);
 // console.log(bloodseker.heal());
 // console.log(bloodseker);
-// // console.log(Hero.addHero());
-// console.log(Hero.counter);
+// bloodseker2.attack();
+// // console.log(Hero.#addHero());
+// console.log(Hero.getHeroNumber());
 
 // *******Task-4******* \\
 // Необхідно створити клас BankAccount, який представляє банківський рахунок. Клас повинен мати приватну властивість balance, яка представляє баланс рахунку. Клас повинен також мати публічні методи deposit та withdraw, які дозволяють здійснювати операції з депозитом та зняттям коштів з рахунку. При цьому balance повинна бути доступна лише в межах класу BankAccount та його приватних методів.
 
-class BankAccount {
-  #balance = 0;
-  deposit(amount) {
-    if (amount > 0) {
-      this.#changeBalance(amount);
-      console.log(`Здіснено депозит на ${amount}`);
-      return;
-    }
+// class BankAccount {
+//   #balance = 0;
+//   deposit(amount) {
+//     if (amount > 0) {
+//       this.#changeBalance(amount);
+//       console.log(`Здіснено депозит на ${amount}`);
+//       return;
+//     }
 
-    console.log("Сума має бути більша за 0");
-  }
-  withdraw(amount) {
-    if (amount <= 0) {
-        console.log("Сума має бути більша за 0");
-    }else if(amount > this.#balance){
-        console.log("Недостатньо коштів на рахунку");
-    }else{
-        this.#changeBalance(-amount)
-        console.log(`Знято ${amount}`);
-    }
-  }
+//     console.log("Сума має бути більша за 0");
+//   }
+//   withdraw(amount) {
+//     if (amount <= 0) {
+//         console.log("Сума має бути більша за 0");
+//     }else if(amount > this.#balance){
+//         console.log("Недостатньо коштів на рахунку");
+//     }else{
+//         this.#changeBalance(-amount)
+//         console.log(`Знято ${amount}`);
+//     }
+//   }
 
-  #changeBalance(amount) {
-    this.#balance += amount;
-  }
-}
+//   #changeBalance(amount) {
+//     this.#balance += amount;
+//   }
+// }
 
-const instance = new BankAccount();
-instance.deposit(100);
-// instance.deposit(1200);
-instance.withdraw(1000);
-console.log(instance);
+// const instance = new BankAccount();
+// instance.deposit(100);
+// // instance.deposit(1200);
+// instance.withdraw(1000);
+// console.log(instance);
