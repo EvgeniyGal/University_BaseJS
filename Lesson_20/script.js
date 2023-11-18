@@ -16,6 +16,7 @@
 const elements = {
   list: document.querySelector(".js-movie-list"),
   btn: document.querySelector(".js-load-more"),
+  guard: document.querySelector(".js-guard"),
 };
 
 const BASE_URL = "https://api.themoviedb.org/3/trending";
@@ -24,7 +25,7 @@ const API_KEY = "f6950824d32492c15f725f636a0c77cc";
 
 let currentPage;
 
-getMovies(499).then((data) => addMoviesToPage(data));
+// getMovies(1).then((data) => addMoviesToPage(data));
 
 // elements.btn.addEventListener("click", handlerLoadMore);
 
@@ -33,6 +34,20 @@ getMovies(499).then((data) => addMoviesToPage(data));
 //     getMovies(currentPage + 1).then((data) => addMoviesToPage(data))
 //   );
 // }
+
+const option = {
+  root: null,
+  rootMargin: "1500px",
+  threshold: 1.0,
+};
+
+const observer = new IntersectionObserver(handlerinfinityScrol, option);
+
+observer.observe(elements.guard);
+
+function handlerinfinityScrol() {
+  getMovies(currentPage ?? 0 + 1).then((data) => addMoviesToPage(data));
+}
 
 async function getMovies(page = 1) {
   const params = new URLSearchParams({
