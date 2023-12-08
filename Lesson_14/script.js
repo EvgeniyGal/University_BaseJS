@@ -81,201 +81,83 @@
 // Для виводу модального вікна застосуй бібліотеку basiclightbox
 // Після визначення переможця обов'язково підготуй ігрове поле для наступної гри
 
-const field = document.querySelector(".container");
+const combination = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9],
+  [1, 4, 7],
+  [2, 5, 8],
+  [1, 5, 9],
+  [3, 5, 7],
+  [3, 6, 9],
+];
 
-class Player {
-  #steps = [];
-  #sign;
+const content = document.querySelector(".content");
+const resetGameBtn = document.querySelector(".js-reset");
+const historyX = [];
+const historyO = [];
 
-  constructor(playerSign) {
-    this.#sign = playerSign;
+let player = "X";
+
+content.addEventListener("click", handlerStep);
+resetGameBtn.addEventListener("click", resetGame);
+
+createMarkup();
+
+function handlerStep(evt) {
+  const { target } = evt;
+  let isWinner = false;
+  if (!target.classList.contains("js-item") || target.textContent) {
+    return;
   }
 
-  get sign() {
-    return this.#sign;
+  target.textContent = player;
+  const id = Number(target.dataset.id);
+  if (player === "X") {
+    historyX.push(id);
+    isWinner = historyX.length > 2 && checkWinner(historyX);
+  } else {
+    historyO.push(id);
+    isWinner = historyO.length > 2 && checkWinner(historyO);
   }
 
-  get steps() {
-    return this.#steps;
+  if (isWinner) {
+    showModal(player);
+    resetGame();
+    return;
   }
 
-  addStep(num) {
-    this.#steps.push(num);
-  }
-}
+  player = player === "X" ? "O" : "X";
 
-class GameField {
-  #container;
-  #currPlayer;
-  #playerX;
-  #playerO;
-  #combination = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9],
-    [1, 4, 7],
-    [2, 5, 8],
-    [1, 5, 9],
-    [3, 5, 7],
-    [3, 6, 9],
-  ];
-
-  constructor(mainContainer) {
-    this.#container = mainContainer;
-    this.resetGame();
-    this.#container.addEventListener(
-      "click",
-      this.#hendlerClickSell.bind(this)
-    );
-  }
-
-  resetGame() {
-    this.#container.innerHTML = this.#createMarkup();
-    this.#playerO = new Player("O");
-    this.#playerX = new Player("X");
-    this.#currPlayer = this.#playerX;
-  }
-
-  #hendlerClickSell(ev) {
-    const sell = ev.target;
-    if (
-      this.#playerO.steps.includes(parseInt(sell.dataset.sellId)) ||
-      this.#playerX.steps.includes(parseInt(sell.dataset.sellId))
-    ) {
-      return;
-    }
-
-    if (sell.classList.contains("sell")) {
-      sell.textContent = this.#currPlayer.sign;
-      this.#currPlayer.addStep(parseInt(sell.dataset.sellId));
-      if (this.#currPlayer.steps.length < 3) {
-        this.#changePlayer();
-      } else {
-        if (this.#isWinner()) {
-          this.#showMessage();
-          this.resetGame();
-        } else {
-          this.#changePlayer();
-          if (this.#playerO.steps.length + this.#playerX.steps.length === 9) {
-            this.resetGame();
-          }
-        }
-      }
-    }
-  }
-
-  #isWinner() {
-    return this.#combination.some((el) =>
-      el.every((sellNum) => this.#currPlayer.steps.includes(sellNum))
-    );
-  }
-
-  #showMessage() {
-    const html = `
-    <div class="message-box">
-    		<h2>Congratulation!!!</h2>
-		<p>Winner is Player ${this.#currPlayer.sign}</p>
-    </div>
-
-	`;
-
-    basicLightbox
-      .create(html, {
-        className: "message",
-      })
-      .show();
-  }
-
-  #changePlayer() {
-    if (this.#currPlayer === this.#playerX) {
-      this.#currPlayer = this.#playerO;
-    } else this.#currPlayer = this.#playerX;
-  }
-
-  #createMarkup() {
-    let result = "";
-    for (let i = 1; i < 10; i++) {
-      result += `<div class="sell" data-sell-id="${i}""></div>`;
-    }
-    return result;
+  if (historyO.length + historyX.length === 9) {
+    resetGame();
   }
 }
 
-new GameField(field);
-
-// const content = document.querySelector(".content");
-// const resetGameBtn = document.querySelector(".js-reset");
-// const historyX = [];
-// const historyO = [];
-
-// let player = "X";
-
-// content.addEventListener("click", handlerStep);
-// resetGameBtn.addEventListener("click", resetGame);
-
-// createMarkup();
-
-// function handlerStep(evt) {
-//   const { target } = evt;
-//   let isWinner = false;
-//   if (!target.classList.contains("js-item") || target.textContent) {
-//     return;
-//   }
-
-//   target.textContent = player;
-//   const id = Number(target.dataset.id);
-//   if (player === "X") {
-//     historyX.push(id);
-//     isWinner = historyX.length > 2 && checkWinner(historyX);
-//   } else {
-//     historyO.push(id);
-//     isWinner = historyO.length > 2 && checkWinner(historyO);
-//   }
-
-//   if (isWinner) {
-//     showModal(player);
-//     resetGame();
-//     return;
-//   }
-
-//   player = player === "X" ? "O" : "X";
-
-//   if (historyO.length + historyX.length === 9) {
-//     resetGame();
-//   }
-// }
-
-// function checkWinner(arr) {
-//   return combination.some((item) => item.every((id) => arr.includes(id)));
-// }
-
-// function showModal(player) {
-//   const instance = basicLightbox.create(`
-//   <div class="box">
-//     <h1 class="title-winner">Player - ${player} is winner</h1>
-//   </div>
-// `);
-//   instance.show();
-// }
-
-// function createMarkup() {
-//   let markup = "";
-//   for (let i = 1; i <= 9; i += 1) {
-//     markup += `<div class="item js-item" data-id="${i}"></div>`;
-//   }
-//   content.innerHTML = markup;
-// }
-
-// function resetGame() {
-//   player = "X";
-//   createMarkup();
-//   historyO.splice(0);
-//   historyX.splice(0);
-// }
-
-function dotsOnDominoBones(n) {
-  return (n * n + n) / 2;
+function checkWinner(arr) {
+  return combination.some((item) => item.every((id) => arr.includes(id)));
 }
-console.log(dotsOnDominoBones(10), 30);
-console.log(dotsOnDominoBones(2020), 30);
-console.log(dotsOnDominoBones(0), 30);
+
+function showModal(player) {
+  const instance = basicLightbox.create(`
+  <div class="box">
+    <h1 class="title-winner">Player - ${player} is winner</h1>
+  </div>
+`);
+  instance.show();
+}
+
+function createMarkup() {
+  let markup = "";
+  for (let i = 1; i <= 9; i += 1) {
+    markup += `<div class="item js-item" data-id="${i}"></div>`;
+  }
+  content.innerHTML = markup;
+}
+
+function resetGame() {
+  player = "X";
+  createMarkup();
+  historyO.splice(0);
+  historyX.splice(0);
+}

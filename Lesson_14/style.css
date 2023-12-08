@@ -1,41 +1,4 @@
 .container {
-  position: absolute;
-  background-color: bisque;
-  border: 4px solid red;
-  width: 400px;
-  height: 400px;
-  display: flex;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  flex-wrap: wrap;
-  box-sizing: border-box;
-}
-
-.sell {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: calc(100% / 3);
-  height: calc(100% / 3);
-  border: 1px solid rgb(0, 0, 0);
-  box-sizing: border-box;
-  font-size: 70px;
-  font-weight: bold;
-  text-align: center;
-  cursor: pointer;
-}
-
-.message-box {
-  background-color: azure;
-  width: 500px;
-  height: 200px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-/* .container {
   display: flex;
   margin: 100px 50px 50px 50px;
 }
@@ -75,4 +38,4 @@
   font-size: 24px;
   font-weight: 700;
   color: blueviolet;
-} */
+}

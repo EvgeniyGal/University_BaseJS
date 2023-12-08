@@ -85,139 +85,47 @@
 // Після повторного натискання на кнопку "Start game" поле має очищатись, а гра починатись з початку.
 
 const elements = {
+  btnStart: document.querySelector(".js-start"),
   container: document.querySelector(".js-container"),
-  items: [...document.querySelector(".js-container").children],
-  btn: document.querySelector(".js-start"),
-  gameLevel: document.querySelector(".js-setLevel"),
 };
 
-let threshold = +elements.gameLevel.value;
+elements.btnStart.addEventListener("click", handlerStartGame);
 
-elements.gameLevel.addEventListener("select", handlerSetGameLevel);
+function handlerStartGame() {
+  const promises = [...elements.container.children].map(createPromise);
+  Promise.allSettled(promises).then((items) => {
+    // 0 * 1000 = 0
+    // 1 * 1000 = 1000
+    // 2 * 1000 = 2000
+    items.forEach((item, idx) => {
+      elements.container.children[idx].textContent = "";
 
-function handlerSetGameLevel(ev) {
-  threshold = +ev.target.value;
-}
-
-elements.btn.addEventListener("click", handlerClickStart);
-
-function handlerClickStart() {
-  const promises = elements.items.flatMap(getPromise);
-  Promise.allSettled(promises).then((values) => {
-    values.forEach((el, idx) =>
       setTimeout(() => {
-        elements.items[idx].textContent = el.value ?? el.reason;
-        if (idx === 2) {
-          showMessage(values.filter((el) => el.value === "🤑").length);
+        elements.container.children[idx].textContent =
+          item.value ?? item.reason;
+
+        if (items.length - 1 === idx) {
+          const instance = basicLightbox.create(`
+	            <h1>${isWinner ? "Winner" : "Loser"}</h1>`);
+          instance.show();
         }
-      }, (idx + 1) * 1000)
-    );
-  });
+      }, (idx + 1) * 1000);
+    });
 
-  //   elements.items.forEach((element, idx) => {
-  //     new Promise((res, rej) => {
-  //       setTimeout(() => {
-  //         getRandomBool() ? res("🤑") : rej("👿");
-  //         if (idx === 2) {
-  //           setTimeout(() => {
-  //             showMessage(
-  //               elements.items.filter((el) => el.textContent === "🤑").length
-  //             );
-  //           }, 0);
-  //         }
-  //       }, (1 + idx) * 1000);
-  //     })
-  //       .then((value) => (element.textContent = value))
-  //       .catch((value) => (element.textContent = value));
-  //   });
+    const isWinner =
+      items.every(({ status }) => status === "fulfilled") ||
+      items.every(({ status }) => status === "rejected");
+  });
 }
 
-function getPromise() {
+function createPromise() {
   return new Promise((res, rej) => {
-    getRandomBool() ? res("🤑") : rej("👿");
+    const random = Math.random();
+
+    if (random > 0.5) {
+      res("🤑");
+    } else {
+      rej("😈");
+    }
   });
 }
-
-function getRandomBool() {
-  const random = Math.random();
-  if (random >= threshold) {
-    return true;
-  }
-  return false;
-}
-
-function showMessage(sameElem) {
-  const instance = basicLightbox.create(
-    `
- <div class="modal">
-        <h2>${sameElem === 0 || sameElem === 3 ? "Winner!" : "Looser!"}</h2>
-    </div>
-`,
-    {
-      onClose: () => {
-        elements.items.forEach((el) => (el.textContent = ""));
-      },
-    }
-  );
-
-  instance.show();
-}
-
-// const elements = {
-//   btnStart: document.querySelector(".js-start"),
-//   container: document.querySelector(".js-container"),
-// };
-
-// elements.btnStart.addEventListener("click", handlerStartGame);
-
-// function handlerStartGame() {
-//   const promises = [...elements.container.children].map(createPromise);
-//   Promise.allSettled(promises).then((items) => {
-//     // 0 * 1000 = 0
-//     // 1 * 1000 = 1000
-//     // 2 * 1000 = 2000
-//     items.forEach((item, idx) => {
-//       elements.container.children[idx].textContent = "";
-
-//       setTimeout(() => {
-//         elements.container.children[idx].textContent =
-//           item.value ?? item.reason;
-
-//         if (items.length - 1 === idx) {
-//           const instance = basicLightbox.create(`
-// 	            <h1>${isWinner ? "Winner" : "Loser"}</h1>`);
-//           instance.show();
-//         }
-//       }, (idx + 1) * 1000);
-//     });
-
-//     const isWinner =
-//       items.every(({ status }) => status === "fulfilled") ||
-//       items.every(({ status }) => status === "rejected");
-//   });
-// }
-
-// function createPromise() {
-//   return new Promise((res, rej) => {
-//     const random = Math.random();
-
-//     if (random > 0.5) {
-//       res("🤑");
-//     } else {
-//       rej("😈");
-//     }
-//   });
-// }
-
-// Return an array
-// var seqlist = function (first, c, l) {
-//   // Thou shalt begin !
-//   return Array.from({ length: l }, (_, idx) => idx * c + first);
-// };
-
-// console.log(seqlist(0, 1, 20));
-
-fetch("https://rickandmortyapi.com/api/character")
-  .then((response) => response.json())
-  .then((users) => console.log(users))
-  .catch((err) => console.log(err));

@@ -343,11 +343,11 @@
 // console.log(updateCourse("qwerty", "NestJS"));
 // console.log(courses); // ['HTML', 'CSS', 'JavaScript', 'PostgreSQL', 'NestJS']
 
-
 // console.log(courses.length);// властивість
 // console.log(courses.push());// метод
 
-
-console.log(~~'rq');
-console.log(Number('rq'));
-console.log(+'rq');
+// console.log(~~'rq');
+// console.log(Number('rq'));
+// console.log(+'rq');
+let ggg = 0;
+console.log(++ggg);

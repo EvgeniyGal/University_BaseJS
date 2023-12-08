@@ -49,137 +49,74 @@
 // 4 Середню температуру в Цельсія (avgtemp_c)
 // Приклад картки https://prnt.sc/h_p-A6Hty-i-
 
-// const elements = {
-//   form: document.querySelector(".js-search-form"),
-//   list: document.querySelector(".js-list"),
-// };
-
-// elements.form.addEventListener("submit", handlerForecast);
-
-// function handlerForecast(evt) {
-//   evt.preventDefault();
-
-//   const { city, days } = evt.currentTarget.elements;
-
-//   serviceWeather(city.value, days.value)
-//     .then((data) => {
-//       elements.list.innerHTML = createMarkup(
-//         data.forecast.forecastday,
-//         data.location
-//       );
-//     })
-//     .catch((err) => {
-//       elements.list.innerHTML =
-//         '<li class="weather-card"><img src="https://repository-images.githubusercontent.com/627560142/41fad3ef-09ac-4e99-a6b7-bacf592b3142" alt="weather" width="500"/></li>';
-//       console.log(err);
-//     });
-// }
-
-// function serviceWeather(city = "", days = "0") {
-//   const BASE_URL = "http://api.weatherapi.com/v1";
-//   const END_POINT = "/forecast.json";
-//   const API_KEY = "6410346f89264d6e919165208231505";
-
-//   const params = new URLSearchParams({
-//     key: API_KEY,
-//     q: city,
-//     days: days,
-//     lang: "uk",
-//   });
-
-//   //   console.log(params.toString());
-//   return fetch(`${BASE_URL}${END_POINT}?${params}`).then((resp) => {
-//     console.log(resp);
-//     if (!resp.ok) {
-//       throw new Error(resp.statusText);
-//     }
-
-//     return resp.json();
-//   });
-//   //   fetch(`${BASE_URL}${END_POINT}?key=${API_KEY}&q=Paris&days=2&lang=uk`)
-// }
-
-// function createMarkup(arr, location) {
-//   return arr
-//     .map(
-//       ({
-//         date,
-//         day: {
-//           avgtemp_c,
-//           condition: { icon, text },
-//         },
-//       }) => `
-//   <li class="weather-card">
-//     <img src="${icon}" alt="${text}" class="weather-icon" />
-//     <h2 class="date">${location.name}</h2>
-//     <h3 class="date">${location.country}</h3>
-//     <h4 class="date">${date}</h4>
-//     <h4 class="weather-text">${text}</h4>
-//     <h4 class="temperature">${avgtemp_c} °C</h4>
-// </li>`
-//     )
-//     .join("");
-// }
-
 const elements = {
   form: document.querySelector(".js-search-form"),
   list: document.querySelector(".js-list"),
 };
 
-elements.form.addEventListener("submit", handlerShowWeather);
+elements.form.addEventListener("submit", handlerForecast);
 
-function handlerShowWeather(ev) {
-  ev.preventDefault();
+function handlerForecast(evt) {
+  evt.preventDefault();
 
-  const { city, days } = ev.currentTarget.elements;
+  const { city, days } = evt.currentTarget.elements;
 
-  getWeatherData(city.value, days.value)
-    .then(({ forecast: { forecastday }, location }) => {
-      elements.list.innerHTML = createMarkup(forecastday, location);
+  serviceWeather(city.value, days.value)
+    .then((data) => {
+      elements.list.innerHTML = createMarkup(
+        data.forecast.forecastday,
+        data.location
+      );
     })
-    .catch(
-      (err) =>
-        (elements.list.innerHTML = `   <li class="weather-card" >
-        
-        <img  width="500" src="https://static.vecteezy.com/system/resources/thumbnails/026/573/373/original/rain-umbrella-404-error-animation-protection-weather-rainy-error-message-gif-motion-graphic-autumn-umbrella-raindrops-falling-animated-cartoon-line-object-4k-isolated-on-white-background-video.jpg" alt="${err}" />
-
-      </li>`)
-    );
+    .catch((err) => {
+      elements.list.innerHTML =
+        '<li class="weather-card"><img src="https://repository-images.githubusercontent.com/627560142/41fad3ef-09ac-4e99-a6b7-bacf592b3142" alt="weather" width="500"/></li>';
+      console.log(err);
+    });
 }
 
-function getWeatherData(city = "", period = "1") {
-  const TOKEN = "6410346f89264d6e919165208231505";
-  const URL = "http://api.weatherapi.com/v1/forecast.json";
-  const LANG = "uk";
+function serviceWeather(city = "", days = "0") {
+  const BASE_URL = "http://api.weatherapi.com/v1";
+  const END_POINT = "/forecast.json";
+  const API_KEY = "6410346f89264d6e919165208231505";
 
   const params = new URLSearchParams({
-    key: TOKEN,
+    key: API_KEY,
     q: city,
-    days: period,
-    lang: LANG,
+    days: days,
+    lang: "uk",
   });
 
-  return fetch(`${URL}?${params}`).then((res) => {
-    if (!res.ok) {
-      throw new Error(res.statusText);
+  //   console.log(params.toString());
+  return fetch(`${BASE_URL}${END_POINT}?${params}`).then((resp) => {
+    console.log(resp);
+    if (!resp.ok) {
+      throw new Error(resp.statusText);
     }
-    return res.json();
+
+    return resp.json();
   });
+  //   fetch(`${BASE_URL}${END_POINT}?key=${API_KEY}&q=Paris&days=2&lang=uk`)
 }
 
-function createMarkup(arr, { name: city, country }) {
-  return arr.map(
-    ({
-      day: {
-        avgtemp_c: temp,
-        condition: { icon, text: description },
-      },
-    }) => `   <li class="weather-card">
-        <h2 class="city">${city}</h2>
-        <h3 class="country">${country}</h3>
-        <img class="weather-icon" src="${icon}" alt="${description}" />
-        <h4 class="temperature">${temp}</h4>
-        <p class="weather-text">${description}</p>
-      </li>`
-  );
+function createMarkup(arr, location) {
+  return arr
+    .map(
+      ({
+        date,
+        day: {
+          avgtemp_c,
+          condition: { icon, text },
+        },
+      }) => `
+  <li class="weather-card">
+    <img src="${icon}" alt="${text}" class="weather-icon" />
+    <h2 class="date">${location.name}</h2>
+    <h3 class="date">${location.country}</h3>
+    <h4 class="date">${date}</h4>
+    <h4 class="weather-text">${text}</h4>
+    <h4 class="temperature">${avgtemp_c} °C</h4>
+</li>`
+    )
+    .join("");
 }
